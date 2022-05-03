@@ -2,9 +2,19 @@
 
 You can use the [editor on GitHub](https://github.com/subsist-io/docs-pages/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
 
-link to [Apple](/docs/stores/apple.md)
+### Models
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+link to [Amazon](/docs/models/receipts)
+link to [Amazon](/docs/models/transactions)
+
+### Sources 
+
+link to [Amazon](/docs/sources/amazon)
+link to [Apple](/docs/sources/apple)
+link to [Braintree](/docs/sources/braintree)
+link to [Google](/docs/sources/google)
+link to [Roku](/docs/sources/roku)
+
 
 ### Markdown
 
