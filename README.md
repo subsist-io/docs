@@ -2,22 +2,24 @@
 
 ### Models
 
-link to [Receipts](/models/receipts)
+[Subscription Lifecycle](/models/lifecycle)
 
-link to [Transactions](/models/transactions)
+[Receipts](/models/receipts)
+
+[Transactions](/models/transactions)
 
 ### Sources 
 
 The information we have gathered for these merchants is linked below.
 
-link to [Amazon](/sources/amazon)
+[Amazon](/sources/amazon)
 
-link to [Apple](/sources/apple)
+[Apple](/sources/apple)
 
-link to [Braintree](/sources/braintree)
+[Braintree](/sources/braintree)
 
-link to [Google](/sources/google)
+[Google](/sources/google)
 
-link to [Roku](/sources/roku)
+[Roku](/sources/roku)
 
-link to [Roku](/sources/stripe)
+[Stripe](/sources/stripe)
