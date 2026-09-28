@@ -42,10 +42,10 @@ Every store receipt also has a `merchant_response` JSON column holding the **com
 |---|---|---|
 | Apple | `apple.AppleReceipt` | One row per subscription: `original_transaction_id`, `app` (credentials in `apple.AppleApp`), `environment`, `status` (1–5), `auto_renew_status`, `expires_dt`, `app_account_token`; `receipt` holds a legacy base64 app receipt until it is converted. Notifications are logged in `apple.AppleNotification` |
 | Google | `google.GoogleReceipt` (package `google_play`) | `purchase_token` (primary key), `app` (credentials in `GooglePlayApp`), `subscription_state`, `auto_renew_enabled`, `expires_dt`, `base_plan_id`, `offer_id`, `obfuscated_external_account_id`, `linked_purchase_token` / `subscription_root_token` / `superseded_by` (the token chain). Notifications are logged in `GoogleNotification` |
-| Amazon | `amazon.AmazonReceipt` | `merchant_user_id`, `receipt_id` |
+| Amazon | `amazon.AmazonReceipt` | `merchant_user_id`, `receipt_id` (unique), `app` (credentials in `AmazonApp`), the documented RVS subscription fields (`auto_renewing`, renewal/cancel/free-trial/grace-period dates, `cancel_reason`), `status`, `environment`, and `subscription_root_id` for plan-change chains. Notifications are logged in `AmazonNotification` |
 | Roku | `roku.RokuReceipt` | Flattened `validate-transaction` fields: `transaction_id`, `original_transaction_id`, `product_id`, `purchase_status`, `is_entitled`, `cancelled`, `expiration_date`, `amount`, `tax`, `total`, `currency`, `roku_customer_id`, `partner_reference_id`, and error fields |
 
-The Roku table flattens the response into columns; the others keep it only in `merchant_response`. The Roku app currently has no migrations, so its table will not be created until `makemigrations roku` is run.
+The Roku table flattens the response into columns; every store also keeps the full response in `merchant_response`.
 
 ## How a receipt moves through Subsist
 
@@ -66,7 +66,7 @@ Every store adapter still targets the API that existed in 2022. The store pages 
 |---|---|---|
 | Apple | App Store Server API + Notifications V2 (migrated 2026-09-28; `verifyReceipt` no longer called) | Same |
 | Google | v3 `purchases.subscriptionsv2.get` + RTDN (migrated 2026-09-28) | Same |
-| Amazon | RVS 1.0 `verifyReceiptId` (still current) | Same, plus Real-time Notifications via SNS |
-| Roku | `validate-transaction` (still current) | Same, plus push notifications and Enhanced Subscription Recovery |
+| Amazon | RVS 1.0 + Real-time Notifications via SNS (migrated 2026-09-28) | Same |
+| Roku | Roku Pay web services + signed push notifications + Enhanced Subscription Recovery (migrated 2026-09-28) | Same |
 
-Apple and Google Play accept server notifications; Amazon and Roku don't yet. Adding a notification intake per store is the biggest gap between the receipt model and how the stores expect to be integrated today.
+All four stores' server notifications are now received and verified. Adding a notification intake per store is the biggest gap between the receipt model and how the stores expect to be integrated today.

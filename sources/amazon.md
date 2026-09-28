@@ -159,6 +159,8 @@ Amazon does not publish a rate limit, so any request rate is unverified. Honor H
 
 ## Migration notes for subsist-app
 
+> **Status (2026-09-28):** implemented in `subsist-app` (not yet deployed). `amazon/client.py` calls RVS with typed errors per HTTP status (410 treated as canceled); `amazon/sync.py` records one ledger row per billing period (`<receiptId>:<period start ms>`), follows `relatedReceipts` plan-change chains and handles null `renewalDate`; `amazon/views.py` receives SNS Real-time Notifications at `/amazon/notifications/<app id>/`, verifies SNS signatures (v1 and v2), confirms the subscription, deduplicates on `MessageId` and re-verifies via RVS; `manage.py amazon_sync` follows the polling guidance above. Still open: encrypting the shared secret, full certificate-chain validation for SNS signing certs, and price data (RVS returns none).
+
 This section compares what `subsist-app/amazon/models.py` (2022) does today with what it should do.
 
 - **Endpoint is still correct.** The code calls the production RVS `https://appstore-sdk.amazon.com/version/1.0/verifyReceiptId/...` URL, and 1.0 is still the current operation version [7]. The remaining gaps: add a sandbox mode (`/sandbox/version/1.0/...`) for App Tester receipts [9]; add a request timeout; and keep the shared secret out of logs and exception messages, since it sits in the URL path.

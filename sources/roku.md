@@ -217,6 +217,8 @@ Apps on Basic recovery have no on-hold row [6].
 
 ## Migration notes for subsist-app
 
+> **Status (2026-09-28):** implemented in `subsist-app` (not yet deployed). `roku/client.py` wraps the Roku Pay web services with typed errors, a per-key rate limit and the documented 429 backoff; `roku/sync.py` validates transactions, applies push payloads (ignoring out-of-order replays) and links upgrades/downgrades via `originalTransactionId`; `roku/views.py` verifies signed (RS256 JWS) pushes at `/roku/notifications/<app id>/`, deduplicates, strips Instant Signup PII and answers with 200 plus the `responseKey`; `manage.py roku_sync` implements the nightly Enhanced Subscription Recovery sync. Still open: encrypting the API keys, a product catalog for trial/intro-offer detection outside pushes, and optional `cancel-subscription` calls for ended subscriptions.
+
 What `subsist-app/roku/models.py` (2022) does today, and what should change:
 
 - **Pull only.** The code only calls `validate-transaction` (`RokuRequester.fetch`) with the correct base URL and GET path. There is no push-notification ingestion at all, so it cannot see grace, on-hold, refunds, credits, resubscribes, upgrade/downgrade pairs or chargebacks. Add a push endpoint that:
